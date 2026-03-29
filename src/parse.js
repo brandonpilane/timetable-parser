@@ -9,7 +9,11 @@ function parseTimetable(rawData) {
     // Detect venue
     if (typeof firstCell === "string" && firstCell.startsWith("VENUE:")) {
       currentVenue = firstCell.replace("VENUE:", "").trim();
-      sections[currentVenue] = [];
+      if (!sections[currentVenue]) {
+        // create new section only if it doesn't exist yet
+        // this is to avoid overwriting existing sections
+        sections[currentVenue] = [];
+      }
       weekdays = []; // reset for new venue
       continue;
     }
@@ -25,8 +29,20 @@ function parseTimetable(rawData) {
       continue; // skip header itself
     }
 
-    // Collect lesson rows (still raw for now)
-    sections[currentVenue].push(row);
+    // Skip rows that are too short or have no time
+    if (!firstCell || typeof firstCell !== "string") continue;
+
+    // Extract lessons
+    for (let i = 1; i <= 5; i++) {
+      const subject = row[i];
+      if (subject && subject.trim() !== "") {
+        sections[currentVenue].push({
+          day: weekdays[i - 1],
+          time: firstCell,
+          subject: subject.trim(),
+        });
+      }
+    }
   }
 
   return sections;
