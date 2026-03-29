@@ -2,16 +2,18 @@
   "name": "timetable-parser",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
     "inspect": "node src/inspect.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Brandon Pilane",
   "license": "ISC",
   "packageManager": "pnpm@10.33.0",
   "dependencies": {
     "xlsx": "^0.18.5"
   }
 }
+  
