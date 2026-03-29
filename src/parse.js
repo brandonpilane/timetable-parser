@@ -1,14 +1,29 @@
-function parseTimetable(rawData) {
+function parseTimetable(rawData, merges = []) {
   const sections = {};
   let currentVenue = null;
   let weekdays = [];
 
-  for (const row of rawData) {
+  // Helper: check if cell [r, c] is part of a merge and get the top-left value
+  function getMergedValue(r, c) {
+    for (const merge of merges) {
+      const { s, e } = merge; // start and end {r, c}, 0-indexed
+      if (r >= s.r && r <= e.r && c >= s.c && c <= e.c) {
+        return rawData[s.r][s.c]; // top-left value of merged block
+      }
+    }
+    return rawData[r][c];
+  }
+
+  for (let r = 0; r < rawData.length; r++) {
+    const row = rawData[r];
     const firstCell = row[0];
 
     // Detect venue
-    if (typeof firstCell === "string" && firstCell.startsWith("VENUE:")) {
-      currentVenue = firstCell.replace("VENUE:", "").trim();
+    if (
+      typeof firstCell === "string" &&
+      firstCell.trim().toUpperCase().startsWith("VENUE:")
+    ) {
+      currentVenue = firstCell.split(":")[1].trim();
       if (!sections[currentVenue]) {
         // create new section only if it doesn't exist yet
         // this is to avoid overwriting existing sections
@@ -33,8 +48,7 @@ function parseTimetable(rawData) {
       row.length >= 6 &&
       expectedDays.every(
         (day, i) =>
-          typeof row[i + 1] === "string" &&
-          row[i + 1].trim().toUpperCase() === day,
+          row[i + 1] && row[i + 1].toString().trim().toUpperCase() === day,
       )
     ) {
       weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
@@ -44,14 +58,14 @@ function parseTimetable(rawData) {
     // Skip rows that are too short or have no time
     if (!firstCell || typeof firstCell !== "string") continue;
 
-    // Extract lessons
+    // Extract lessons with merged cell handling
     for (let i = 1; i <= 5; i++) {
-      const subject = row[i];
-      if (subject && subject.trim() !== "") {
+      const subject = getMergedValue(r, i);
+      if (subject && subject.toString().trim() !== "") {
         sections[currentVenue].push({
           day: weekdays[i - 1],
           time: firstCell,
-          subject: subject.trim(),
+          subject: subject.toString().trim(),
         });
       }
     }
