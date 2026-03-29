@@ -21,12 +21,24 @@ function parseTimetable(rawData) {
     if (!currentVenue) continue; // skip anything before first venue
 
     // Detect header row
+    const expectedDays = [
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY",
+    ];
+
     if (
       row.length >= 6 &&
-      row.slice(1, 6).every((cell) => typeof cell === "string")
+      expectedDays.every(
+        (day, i) =>
+          typeof row[i + 1] === "string" &&
+          row[i + 1].trim().toUpperCase() === day,
+      )
     ) {
-      weekdays = row.slice(1, 6); // "Monday" to "Friday"
-      continue; // skip header itself
+      weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+      continue;
     }
 
     // Skip rows that are too short or have no time
