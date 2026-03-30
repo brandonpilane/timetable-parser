@@ -1,3 +1,25 @@
+const TYPES = ["LECTURE", "LAB", "TUTORIAL"];
+
+function parseSubject(raw) {
+  const words = raw.trim().split(/\s+/);
+
+  const typeIndex = words.findIndex((w) => TYPES.includes(w.toUpperCase()));
+
+  if (typeIndex === -1) {
+    return {
+      course: raw,
+      type: null,
+      group: null,
+    };
+  }
+
+  return {
+    course: words.slice(0, typeIndex).join(" "),
+    type: words[typeIndex].toUpperCase(),
+    group: words.slice(typeIndex + 1).join(" ") || null,
+  };
+}
+
 function parseTimetable(rawData, merges = []) {
   const sections = {};
   let currentVenue = null;
@@ -62,10 +84,11 @@ function parseTimetable(rawData, merges = []) {
     for (let i = 1; i <= 5; i++) {
       const subject = getMergedValue(r, i);
       if (subject && subject.toString().trim() !== "") {
+        const parsed = parseSubject(subject.toString());
         sections[currentVenue].push({
           day: weekdays[i - 1],
           time: firstCell,
-          subject: subject.toString().trim(),
+          ...parsed,
         });
       }
     }
