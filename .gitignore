@@ -2,4 +2,5 @@ node_modules/
 data/*.xlsx
 data/*.xlsx:Zone.Identifier
 data/*.csv
+data/*.json
 .env
