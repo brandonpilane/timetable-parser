@@ -6,6 +6,15 @@ function parseSubject(raw) {
   const typeIndex = words.findIndex((w) => TYPES.includes(w.toUpperCase()));
 
   if (typeIndex === -1) {
+    if (words.length === 3) {
+      // Handles case where there is a group name but no type
+      return {
+        course: words.slice(0, 2).join(" "),
+        type: null,
+        group: words[2],
+      };
+    }
+
     return {
       course: raw,
       type: null,
