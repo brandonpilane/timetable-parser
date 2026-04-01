@@ -77,8 +77,12 @@ function parseTimetable(rawData, merges = []) {
       continue;
     }
 
-    // Skip rows that are too short or have no time
-    if (!firstCell || typeof firstCell !== "string") continue;
+    // Skip rows that are not strings or don't have a time
+    if (typeof firstCell !== "string") continue;
+    const timeMatch = firstCell.match(/^\d{4}-\d{4}$/);
+    if (!timeMatch) continue;
+
+    const [timeStart, timeEnd] = firstCell.split("-");
 
     // Extract lessons with merged cell handling
     for (let i = 1; i <= 5; i++) {
@@ -87,7 +91,8 @@ function parseTimetable(rawData, merges = []) {
         const parsed = parseSubject(subject.toString());
         sections[currentVenue].push({
           day: weekdays[i - 1],
-          time: firstCell,
+          start: timeStart,
+          end: timeEnd,
           ...parsed,
         });
       }
