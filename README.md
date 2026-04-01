@@ -22,12 +22,12 @@ A node.js script that parses the BIUST timetable into a JSON file.
 ## Project Structure
 ```
 timetable-parser/
-├── data/ # Data and output files
-│ ├── timetable.xlsx  
-│ └── timetable.json
+├── data/|                   # Data and output files
+│        ├── timetable.xlsx  
+│        └── timetable.json
 ├── src/ │
-| ├── index.js # Entry point
-│ └── parse.js # Core parsing logic
+|        ├── index.js        # Entry point
+│        └── parse.js        # Core parsing logic
 ├── package.json
 └── README.md
 ```
