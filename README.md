@@ -10,12 +10,12 @@ A node.js script that parses the BIUST timetable into a JSON file.
    ```
 2. Install dependencies
    ```bash
-   npm install
+   pnpm install
    ```
 3. Save the timetable to `data/timetable.xlsx`
 4. Run the script
    ```bash
-   node src/index.js
+   pnpm start
    ```
 5. The parsed timetable will be written to `data/timetable.json`
 
