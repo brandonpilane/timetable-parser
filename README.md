@@ -20,7 +20,7 @@ A node.js script that parses the BIUST timetable into a JSON file.
 5. The parsed timetable will be written to `data/timetable.json`
 
 ## Project Structure
-
+```
 timetable-parser/
 ├── data/ # Data and output files
 │ ├── timetable.xlsx  
@@ -30,6 +30,7 @@ timetable-parser/
 │ └── parse.js # Core parsing logic
 ├── package.json
 └── README.md
+```
 
 ## Output format
 
